@@ -14,7 +14,7 @@ st.write("DeGroot gives an insight about how network topology influence spread o
 st.write("Move the slide to inspect the belief vector as it updates according to DeGroot model.")
 
 p0 = np.matrix([1, 0, 0]).T
-T = np.matrix([[1/3, 1/3, 1/3], [1/2, 1/2, 0], [0, 1/4, 3/4]])
+T = np.matrix([[1/2, 1/2, 0], [0, 1/2, 1/2], [1, 0, 0]])
 
 dg_steps = dg.deGrootSteps(T, p0)
 
@@ -22,6 +22,14 @@ step = st.slider('Step', 0, len(dg_steps)-1, 0)
 st.write("Step: ", step, '')
 
 G = nx.from_numpy_matrix(T, create_using=nx.MultiDiGraph())
+
+T_t = np.linalg.matrix_power(T, step+1)
+
+T_label = u.convert_to_frac(T)
+for i, j, d in G.edges(data=True):
+    d['label'] = T_label[i][j]
+
+
 dot = nx.nx_pydot.to_pydot(G)
 
 chart_data = pd.DataFrame(dg_steps[step])
@@ -60,7 +68,7 @@ with col5:
 
 st.title("Convergence of T")
 
-T_t = np.linalg.matrix_power(T, step+1)
+
 T_t_mat = u.convert_to_latex(T_t)
 
 st.latex(r'''
