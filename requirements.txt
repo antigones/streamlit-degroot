@@ -3,3 +3,4 @@ networkx==2.5
 numpy==1.19.2
 pandas==1.1.5
 graphviz==0.15
+pydot==1.4.1
